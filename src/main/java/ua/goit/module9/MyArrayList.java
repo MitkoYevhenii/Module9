@@ -26,8 +26,10 @@ public class MyArrayList<T> {
     }
 
     public void add(T value) {
+        ensureCapacity();
+
         if (size >= array.length) {
-            int newCapacity = (array.length * 3) / 2 + 1;
+            int newCapacity = array.length * 2;
             T[] newData = (T[]) new Object[newCapacity];
 
             for (int i = 0; i < size; i++) {
@@ -45,11 +47,11 @@ public class MyArrayList<T> {
             throw new IndexOutOfBoundsException("Index is out of bounds");
         }
 
-        for (int i = index; i < size; i++) {
+        for (int i = index; i < size - 1; i++) {
             array[i] = array[i + 1];
         }
-        array[--size] = null;
-
+        array[size - 1] = null;
+        size--;
     }
 
     public void clear() {
@@ -68,12 +70,15 @@ public class MyArrayList<T> {
     }
 
     public T get(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index is out of bounds");
+        }
         return array[index];
     }
 
     private void ensureCapacity() {
         if (size == array.length) {
-            int newCapacity = (array.length * 3) / 2 + 1;
+            int newCapacity = array.length * 2;
             array = Arrays.copyOf(array, newCapacity);
         }
     }
@@ -87,6 +92,7 @@ class MyArrayListTest {
         myArrayList.add("Bobki");
         myArrayList.add("Loli");
         System.out.println("myArrayList size: " + myArrayList.size());
+
         for (int i = 0; i < myArrayList.size(); i++) {
             System.out.println(myArrayList.get(i));
         }
